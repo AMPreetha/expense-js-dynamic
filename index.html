@@ -10,50 +10,50 @@
         <form  onsubmit="saveToLocalStorage(event)">
             <center>
 
-            <label> Choose expense amount:</label>
+            <label> Choose Dish:</label>
             <br>
             <br>
-            <input id='expenseAmount' type="number" name="expenseAmount"  required/>
+            <input id='dish' type="number" name="foodDish"  required/>
             <br>
             <br>
-            <label> Choose description:</label>
+            <label> Choose Amount:</label>
             <br>
             <br>
-            <input id='description' type="text" name="descriptionId"  required/>
+            <input id='amountf' type="text" name="foodAmount"  required/>
             <br>
             <br>
 
-            <label for="category"  id="category">Choose a categeory:</label>
+            <label for="category"  id="category">Choose a table:</label>
             <br>
             <br>
 
             <select name="category" id="category">
-                <option value="fuel">Fuel</option>
-                <option value="food">Food</option>
-                <option value="electricity">Electricity</option>
-                <option value="movie">Movie</option>
+                <option value="tablea">Tablea</option>
+                <option value="tableb">Tableb</option>
+                <option value="tablec">Tablec</option>
+                <option value="Tabled">Tabled</option>
             </select>
             <br>
             <br>
             <button> Submit </button>
         </center>
         </form>
-        <ul id='listOfUsers'></ul>
+        <ul id='listOfUsers'><b>List of tables</b></ul>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.3/axios.min.js"></script>
         <script>
             function saveToLocalStorage(event) {
                 event.preventDefault();
-                const expense = event.target.expenseAmount.value;
-                const description = event.target.descriptionId.value;
+                const dish = event.target.dish.value;
+                const amountf = event.target.amountf.value;
                 const category = event.target.category.value;
                 
                 const obj = {
-                    expense,
-                    description,
+                    dish,
+                    amountf,
                     category
                 }
 
-                axios.post("https://crudcrud.com/api/8312c628f4e54b3291f9401dcf767103/expense",obj)
+                axios.post("https://crudcrud.com/api/45bc9e88c67f4a22ad994d46708297fd/orders",obj)
                 .then((response)=>{
                     showNewUserOnScreen(response.data)
                     console.log(response)
@@ -66,7 +66,7 @@
 
             window.addEventListener("DOMContentLoaded", () => {
 
-                axios.get("https://crudcrud.com/api/8312c628f4e54b3291f9401dcf767103/expense")
+                axios.get("https://crudcrud.com/api/45bc9e88c67f4a22ad994d46708297fd/ordersv")
                 .then((response)=>{
                     console.log(response)
                     for(let i=0;i<response.data.length;i++){
@@ -81,17 +81,17 @@
             })
 
             function showNewUserOnScreen(user){
-                document.getElementById('description').value = '';
-                document.getElementById('expenseAmount').value = '';
+                document.getElementById('amountf').value = '';
+                document.getElementById('dish').value = '';
                 document.getElementById('category').value ='';
                 if(localStorage.getItem(user.description) !== null){
                     removeUserFromScreen(user.description)
                 }
 
                 const parentNode = document.getElementById('listOfUsers');
-                const childHTML = `<li id=${user._id}> ${user.expense} - ${user.description} -${user.category}
+                const childHTML = `<li id=${user._id}> ${user.dish} - ${user.amountf} -${user.category}
                                         <button onclick=deleteUser('${user._id}')> Delete Expense </button>
-                                        <button onclick=editUserDetails('${user.description}','${user.expense}','${user.category}','${user._id}')>Edit Expense </button>
+                                        <button onclick=editUserDetails('${user.amountf}','${user.dish}','${user.category}','${user._id}')>Edit Expense </button>
                                      </li>`
 
                 parentNode.innerHTML = parentNode.innerHTML + childHTML;
@@ -99,10 +99,10 @@
 
             //Edit User
 
-            function editUserDetails(descriptionId, expenseAmount, category, userId){
+            function editUserDetails(foodAmount,foodDish, category, userId){
 
-                document.getElementById('description').value = descriptionId;
-                document.getElementById('expenseAmount').value = expenseAmount;
+                document.getElementById('amountf').value = foodAmount;
+                document.getElementById('dish').value = foodDish;
                 document.getElementById('category').value =category;
 
                 deleteUser(userId)
@@ -112,7 +112,7 @@
 
             function deleteUser(userId){
 
-                axios.delete(`https://crudcrud.com/api/8312c628f4e54b3291f9401dcf767103/expense/${userId}`)
+                axios.delete(`https://crudcrud.com/api/45bc9e88c67f4a22ad994d46708297fd/orders/${userId}`)
                 .then((response)=>{
                     removeUserFromScreen(userId)
                 })
